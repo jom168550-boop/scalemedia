@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCALEMEDIA — Turn Attention Into Revenue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C2A96A;
+  --gold-light: #D4BC88;
+  --gold-dim: rgba(194,169,106,0.15);
+  --bg: #070707;
+  --bg2: #0F0F0F;
+  --bg3: #161616;
+  --text: #F0EDE6;
+  --text-muted: rgba(240,237,230,0.5);
+  --border: rgba(194,169,106,0.2);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(194,169,106,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+}
+body:hover .cursor { opacity:1; }
+
+/* GRAIN OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0.5;
+}
+
+/* NAV */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+  background: rgba(7,7,7,0.92);
+  backdrop-filter: blur(20px);
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 10px 22px;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.nav-cta:hover {
+  background: var(--gold);
+  color: #000;
+}
+
+.hamburger {
+  display: none;
+  font-size: 22px;
+  color: var(--gold);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* HERO */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 50% at 50% 60%, rgba(194,169,106,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(194,169,106,0.04) 0%, transparent 60%);
+}
+
+.hero-line {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  margin: 0 auto 40px;
+  animation: growLine 1.2s ease forwards;
+}
+
+@keyframes growLine {
+  from { height: 0; opacity: 0; }
+  to { height: 80px; opacity: 1; }
+}
+
+.hero-tag {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.3s forwards;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.5s forwards;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero p {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.7s forwards;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.9s forwards;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 16px 36px;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+}
+
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(240,237,230,0.2);
+  padding: 16px 36px;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+/* STATS BAND */
+.stats-band {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--bg2);
+}
+
+.stat-item {
+  padding: 40px 32px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* SECTIONS */
+.section {
+  padding: 100px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  margin-bottom: 60px;
+}
+
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.section-header h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* SERVICES */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.service-card {
+  background: var(--bg);
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.4s;
+}
+
+.service-card:hover { background: var(--bg3); }
+.service-card:hover::before { width: 100%; }
+
+.service-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--gold-dim);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.service-card h3 {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.service-card .price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--gold);
+  font-weight: 300;
+}
+
+/* ABOUT */
+.about-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-text p {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+.about-visual {
+  position: relative;
+  aspect-ratio: 4/3;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.about-visual-inner {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  font-weight: 300;
+  color: var(--border);
+  letter-spacing: 0.1em;
+}
+
+.about-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(194,169,106,0.06) 0%, transparent 70%);
+}
+
+/* WHY US */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.why-item {
+  padding: 32px;
+  border: 1px solid var(--border);
+  transition: border-color 0.3s;
+}
+
+.why-item:hover { border-color: var(--gold); }
+
+.why-icon {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.why-item h4 {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.why-item p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* TESTIMONIALS */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.testimonial-card {
+  padding: 36px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  position: relative;
+}
+
+.testimonial-card::before {
+  content: '"';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  color: var(--gold-dim);
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  line-height: 1;
+}
+
+.testimonial-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.testimonial-author {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* CONTACT FORM */
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.contact-info p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+
+.contact-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-detail-item {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.contact-detail-item span {
+  color: var(--gold);
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+form .field {
+  margin-bottom: 20px;
+}
+
+form label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 14px 18px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.3s;
+  appearance: none;
+}
+
+form select option { background: var(--bg3); }
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: var(--gold);
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+form .submit-btn {
+  width: 100%;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 16px;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s;
+  margin-top: 8px;
+}
+
+form .submit-btn:hover { background: var(--gold-light); }
+
+.confirmation {
+  display: none;
+  background: var(--bg3);
+  border: 1px solid var(--gold);
+  padding: 28px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.confirmation p { margin-bottom: 12px; color: var(--text-muted); font-size: 14px; }
+.confirmation a { color: var(--gold); text-decoration: none; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* DIVIDER */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+/* FOOTER */
+footer {
+  padding: 40px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* FLOATING */
+.floating-whatsapp {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: #25D366;
+  color: #fff;
+  padding: 14px 20px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  z-index: 500;
+  transition: transform 0.3s;
+}
+
+.floating-whatsapp:hover { transform: translateY(-3px); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(30px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+
+  .nav-links.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    left: 0;
+    background: rgba(7,7,7,0.98);
+    padding: 24px;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero { padding: 60px 24px; min-height: 80vh; }
+  .stats-band { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .section { padding: 60px 24px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .about-visual { display: none; }
+  .why-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+  .form-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 24px; }
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">ScaleMedia</div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="menu">
+    <a href="#">Home</a>
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <span class="hero-tag">Social Media Growth Agency</span>
+  <h1>We turn<br><em>attention</em><br>into revenue</h1>
+  <p>Scale your business with precision-crafted social media strategies built for measurable results.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="scrollToForm()">Free Consultation</button>
+    <a href="#services" class="btn-ghost">Our Services</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item reveal">
+    <div class="stat-num">500+</div>
+    <div class="stat-label">Clients Scaled</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">4×</div>
+    <div class="stat-label">Average ROI</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">30d</div>
+    <div class="stat-label">Results Guaranteed</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<div class="section" id="services">
+  <div class="section-header reveal">
+    <span class="section-label">What We Do</span>
+    <h2>Services built for<br><em>serious growth</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <h3>Instagram Growth</h3>
+      <div class="price">₹4,999 / month</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">02</div>
+      <h3>Facebook Ads</h3>
+      <div class="price">₹6,999 / month</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">03</div>
+      <h3>Content Creation</h3>
+      <div class="price">₹3,999 / month</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">04</div>
+      <h3>Branding</h3>
+      <div class="price">₹2,999 one-time</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">05</div>
+      <h3>Lead Generation</h3>
+      <div class="price">Custom Pricing</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">06</div>
+      <h3>Social Media Management</h3>
+      <div class="price">₹7,999 / month</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<div class="section" id="about">
+  <div class="about-inner">
+    <div class="about-text reveal">
+      <div class="section-header">
+        <span class="section-label">Who We Are</span>
+        <h2>Strategy.<br><em>Execution.</em><br>Results.</h2>
+      </div>
+      <p>We help businesses grow online using proven social media strategies. From content creation to paid ads, we handle everything so you can focus on what matters — scaling your business.</p>
+      <p>Our team combines creative excellence with data-driven decision making to deliver campaigns that don't just look good — they convert.</p>
+    </div>
+    <div class="about-visual reveal">
+      <div class="about-visual-inner">SM</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WHY US -->
+<div class="section">
+  <div class="section-header reveal">
+    <span class="section-label">Why ScaleMedia</span>
+    <h2>Everything you need,<br><em>nothing you don't</em></h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-item reveal">
+      <div class="why-icon">◈</div>
+      <h4>Results-Driven Strategies</h4>
+      <p>Every decision is backed by data. We measure what matters and optimise relentlessly.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-icon">◈</div>
+      <h4>Transparent Pricing</h4>
+      <p>No hidden fees. No surprises. Clear packages built for every stage of growth.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-icon">◈</div>
+      <h4>24h Response Time</h4>
+      <p>We move fast. Your questions, briefs, and revisions are handled without delay.</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-icon">◈</div>
+      <h4>Dedicated Support</h4>
+      <p>A real human on your account — not a ticket queue. We partner, not just deliver.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<div class="section">
+  <div class="section-header reveal">
+    <span class="section-label">Client Stories</span>
+    <h2>Trusted by<br><em>growing brands</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-text">Saw incredible growth within the first 30 days. The team really understood our audience and delivered beyond expectations.</div>
+      <div class="testimonial-author">Rahul — E-commerce Brand</div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-text">Best investment we've made for our social presence. The content quality is unmatched and the results speak for themselves.</div>
+      <div class="testimonial-author">Priya — Lifestyle Brand</div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-text">Highly recommend ScaleMedia to any business serious about growing online. Professional, fast, and genuinely effective.</div>
+      <div class="testimonial-author">Amit — B2B Services</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<div class="section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <span class="section-label">Get In Touch</span>
+      <h3>Start with a<br>free consultation</h3>
+      <p>Tell us about your business and goals. We'll come back with a strategy tailored specifically for your brand — no generic pitches, no fluff.</p>
+      <div class="contact-detail">
+        <div class="contact-detail-item">
+          <span>WhatsApp</span>
+          +91 85917 25750
+        </div>
+        <div class="contact-detail-item">
+          <span>Response Time</span>
+          Within 24 hours
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <form action="https://formspree.io/f/mlgonewo" method="POST" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="Name" placeholder="Full name" required>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="Phone" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="business">Business Name</label>
+          <input type="text" id="business" name="Business" placeholder="Your company or brand">
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="service">Service</label>
+            <select id="service" name="Service">
+              <option>Instagram Growth</option>
+              <option>Facebook Ads</option>
+              <option>Content Creation</option>
+              <option>Branding</option>
+              <option>Lead Generation</option>
+              <option>Social Media Management</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="budget">Budget Range</label>
+            <select id="budget" name="Budget">
+              <option>₹5k – ₹10k</option>
+              <option>₹10k – ₹25k</option>
+              <option>₹25k+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="message">Message (Optional)</label>
+          <textarea id="message" name="Message" placeholder="Tell us about your goals..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Message →</button>
+      </form>
+
+      <div class="confirmation" id="confirm">
+        <p>Thank you! We'll be in touch on WhatsApp shortly.</p>
+        <a href="https://wa.me/8591725750">Continue on WhatsApp →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ScaleMedia</div>
+  <div class="footer-copy">© 2025 ScaleMedia. All rights reserved.</div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a class="floating-whatsapp" href="https://wa.me/8591725750">💬 WhatsApp Us</a>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '8px';
+    cursor.style.height = '8px';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+  });
+});
+
+// Nav toggle
+function toggleMenu() {
+  document.getElementById('menu').classList.toggle('active');
+}
+
+// Scroll to form
+function scrollToForm() {
+  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Form submit
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).then(res => {
+    if (res.ok) {
+      form.reset();
+      form.style.display = 'none';
+      document.getElementById('confirm').style.display = 'block';
+    }
+  });
+}
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
